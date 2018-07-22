@@ -36,7 +36,7 @@ export class SintomasService {
       .http
       .get(`${this.uri}/`, {
         params: {
-          perPage: '' + 50000,
+          perPage: '' + 500000,
           page: '' + 1,
           nombre: ''
         }

@@ -7,43 +7,69 @@
     <h3 class="panel-title">Nueva Enfermedad</h3>
   </div>
   <div class="panel-body">
-    <form [formGroup]="angForm" novalidate>
+    <form #Form="ngForm">
       <div class="form-group">
         <label class="col-md-4">Nombre</label>
-        <input type="text" class="form-control" name="nombre" formControlName="nombre" #nombre/>
+        <input type="text" class="form-control" [(ngModel)]="newEnfermedades.nombre" name="nombre"/>
       </div>
       <div class="form-group">
         <label class="col-md-4">Descripción</label>
-        <input type="text" class="form-control" name="descripcion" formControlName="descripcion" #descripcion/>
+        <input type="text" class="form-control" [(ngModel)]="newEnfermedades.descripcion" name="descripcion"/>
       </div>
       <div class="form-group">
         <label class="col-md-4">Tratamiento</label>
-        <input type="text" class="form-control" name="tratamiento" formControlName="tratamiento" #tratamiento/>
+        <input type="text" class="form-control" [(ngModel)]="newEnfermedades.tratamiento" name="tratamiento"/>
       </div>
       <div>
         <label class="col-md-4">Sintomas</label>
         <ng-multiselect-dropdown
-          [placeholder]="'Seleccionar Sintomas'"
+          [placeholder]="'Seleccionar sintomas'"
           [data]="sintomas"
           [(ngModel)]="newEnfermedades.sintomas"
           [settings]="dropdownSettings"
-          (onSelect)="onSelect($event)"
-          (onDeSelect)="onDeSelect($event)"
-          (onSelectAll)="onSelectAll($event)"
-          (onDeSelectAll)="onDeSelectAll($event)">
+          name="sintomas">
         </ng-multiselect-dropdown>
       </div>
-      <div
-        *ngIf="angForm.controls['nombre'].invalid && (angForm.controls['nombre'].dirty || angForm.controls['nombre'].touched)"
-        class="alert alert-danger">
-        <div *ngIf="angForm.controls['nombre'].errors.required">
-          El campo nombre es obligatorio.
-        </div>
+
+      <div>
+        <table class="table table-hover margin_top_1">
+          <thead>
+          <tr>
+            <th class="row_80 align-middle">Descripcion</th>
+            <th class="row_center_20 align-middle">Respuestas</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr *ngFor="let respuesta of newEnfermedades.respuestas">
+
+            <app-response-component [respuesta]="respuesta"></app-response-component>
+
+            <!--<td class="row_80 align-middle">{{ pregunta.descripcion }}</td>
+            <td class="row_center_20 align-middle">
+              <button (click)="setPregunta(this)" class="btn btn-primary">
+                <span class="glyphicon glyphicon-ok-sign"></span> SI
+              </button>
+              <button (click)="setPregunta(this)" class="btn btn-link mr-3">
+                <span class="glyphicon glyphicon-remove-sign"></span> NO
+              </button>
+              <button (click)="setPregunta(this)" class="btn btn-link mr-3">
+                <span class="glyphicon glyphicon-question-sign"></span>
+              </button>
+             </td>-->
+          </tr>
+          </tbody>
+        </table>
       </div>
+      <!-- -->
+      <!--<div class="alert alert-danger">-->
+        <!--<div>-->
+          <!--El campo nombre es obligatorio.-->
+        <!--</div>-->
+      <!--</div>-->
       <div class="form-group text-right mt-4">
-        <button type="submit" (click)="submit()" [disabled]="angForm.pristine || angForm.invalid"
-                class="btn btn-primary">
-          <span class="glyphicon glyphicon-plus"></span> Agregar
+        <button type="submit" (click)="submit()" [disabled]="" class="btn btn-primary">
+          <span class="glyphicon glyphicon-plus"></span> Guardar
         </button>
         <button (click)="reset()" class="btn btn-link mr-3">
           <span class="glyphicon glyphicon-trash"></span> Limpiar
@@ -125,4 +151,5 @@
   </nav>
 </div>
 <div *ngIf="data == undefined || data.enfermedades.length == 0" class="alert alert-info margin_top_1" role="alert">No hay elementos en la lista</div>
+
 

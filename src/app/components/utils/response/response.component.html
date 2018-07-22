@@ -1,0 +1,12 @@
+<td class="row_80 align-middle">{{ respuesta.pregunta.descripcion }}</td>
+<td class="row_center_20 align-middle">
+  <button (click)="setRespuesta('SI')" class="btn" [class.btn-primary]="respuesta.respuesta === 'SI'" [class.btn-link]="respuesta.respuesta !== 'SI'">
+    <span class="glyphicon glyphicon-ok-sign"></span> SI
+  </button>
+  <button (click)="setRespuesta('NO')" class="btn m-2" [class.btn-danger]="respuesta.respuesta === 'NO'" [class.btn-link]="respuesta.respuesta !== 'NO'">
+    <span class="glyphicon glyphicon-remove-sign"></span> NO
+  </button>
+  <button (click)="setRespuesta('?')" class="btn" [class.btn-warning]="respuesta.respuesta === '?'" [class.btn-link]="respuesta.respuesta !== '?'">
+    <span class="glyphicon glyphicon-question-sign"></span>
+  </button>
+</td>

@@ -10,6 +10,7 @@ import { AppLoadingService } from './components/utils/loading/app-loading.servic
 import { AppLoadingComponent } from './components/utils/loading/app-loading.component';
 
 import { AppComponent } from './app.component';
+import { ResponseComponent } from './components/utils/response/response.component';
 import { EnfermedadesComponent } from './components/enfermedades/enfermedades.component';
 import { PreguntasComponent } from './components/preguntas/preguntas.component';
 import { SintomasComponent } from './components/sintomas/sintomas.component';
@@ -43,6 +44,7 @@ const routes: Routes = [
     AppLoadingComponent,
     SintomasComponent,
     CeilPipe,
+    ResponseComponent
   ],
   imports: [
     BrowserModule,

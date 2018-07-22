@@ -1,5 +1,5 @@
 import {SintomasModel} from './sintomas.model';
-import {PreguntasModel} from './preguntas.model';
+import {RespuestasModel} from './respuestas.model';
 
 export class EnfermedadesModel {
   _id: Number;
@@ -7,10 +7,10 @@ export class EnfermedadesModel {
   descripcion: String;
   tratamiento: String;
   sintomas: SintomasModel[];
-  preguntas: PreguntasModel[];
+  respuestas: RespuestasModel[];
 
   constructor() {
     this.sintomas  = new Array<SintomasModel>();
-    this.preguntas = new Array<PreguntasModel>();
+    this.respuestas = new Array<RespuestasModel>();
   }
 }

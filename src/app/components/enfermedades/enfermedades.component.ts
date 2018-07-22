@@ -12,6 +12,8 @@ import {SintomasResponse} from '../models/sintomas.response';
 import {SintomasModel} from '../models/sintomas.model';
 import {PreguntasModel} from '../models/preguntas.model';
 import {forEach} from '@angular/router/src/utils/collection';
+import {PreguntasService} from '../services/preguntas.service';
+import {RespuestasModel} from '../models/respuestas.model';
 
 @Component({
   selector: 'app-enfermedades',
@@ -20,18 +22,23 @@ import {forEach} from '@angular/router/src/utils/collection';
 })
 export class EnfermedadesComponent implements OnInit {
 
-  angForm: FormGroup;
   newEnfermedades = new EnfermedadesModel();
   data: EnfermedadesResponse;
   filter: EnfermedadesFilter;
-  optionsModel: number[];
   sintomas: SintomasModel[];
-  dropdownList = [];
+  preguntas: PreguntasModel[];
   dropdownSettings = {};
 
   ngOnInit () {
+    // Get all Sintomas
     this.sintomasService.getAll().subscribe(data => {
       this.sintomas = data.sintomas;
+    });
+    // Get all Preguntas
+    this.preguntasService.getAll().subscribe(data => {
+      this.preguntas = data.preguntas;
+      this.newEnfermedades.respuestas = data.preguntas.map(item => new RespuestasModel(item));
+      console.log(this.newEnfermedades);
     });
 
     this.dropdownSettings = {
@@ -45,75 +52,44 @@ export class EnfermedadesComponent implements OnInit {
     };
   }
 
-  onSelect (item: any) {
-    this.newEnfermedades.sintomas.push(item);
-  }
-  onSelectAll (items: any) {
-    this.newEnfermedades.sintomas = items;
-  }
-  onDeSelect (item: any) {
-    this.newEnfermedades.sintomas = this.newEnfermedades.sintomas.filter(function( obj ) {
-      return obj._id !== item._id;
-    });
-  }
-  onDeSelectAll (items: any) {
-    this.newEnfermedades.sintomas = [];
-  }
-
-  constructor(private enfermedadesService: EnfermedadesService, private fb: FormBuilder, private sintomasService: SintomasService) {
+  constructor(private enfermedadesService: EnfermedadesService, private fb: FormBuilder,
+              private sintomasService: SintomasService, private preguntasService: PreguntasService) {
     this.filter = new EnfermedadesFilter();
-    this.createForm();
     this.loadData();
   }
 
-  createForm() {
-    this.angForm = this.fb.group({
-      _id: [],
-      nombre: ['', Validators.required ],
-      descripcion: ['', Validators.required ],
-      tratamiento: ['', Validators.required ]
-    });
-  }
-
   reset() {
-    this.angForm.controls['_id'].setValue('');
-    this.angForm.controls['nombre'].setValue('');
-    this.angForm.controls['descripcion'].setValue('');
-    this.angForm.controls['tratamiento'].setValue('');
+    this.newEnfermedades._id = undefined;
+    this.newEnfermedades.nombre = '';
+    this.newEnfermedades.descripcion = '';
+    this.newEnfermedades.tratamiento = '';
+    this.newEnfermedades.sintomas = [];
+    this.newEnfermedades.respuestas.map(item => item.respuesta = '?');
   }
 
   submit() {
-    if (this.angForm.controls['_id'].value) {
+    if (this.newEnfermedades._id) {
       // Update
-      const obj = {
-        _id: this.angForm.controls['_id'].value,
-        nombre: this.angForm.controls['nombre'].value,
-        descripcion: this.angForm.controls['descripcion'].value,
-        tratamiento: this.angForm.controls['tratamiento'].value,
-        sintomas: this.newEnfermedades.sintomas
-      };
-      this.enfermedadesService.update(obj).subscribe(
+      this.enfermedadesService.update(this.newEnfermedades).subscribe(
         () => this.loadData()
       );
 
     } else {
       // Create
-      this.newEnfermedades.nombre = this.angForm.controls['nombre'].value;
-      this.newEnfermedades.descripcion = this.angForm.controls['descripcion'].value;
-      this.newEnfermedades.tratamiento = this.angForm.controls['tratamiento'].value;
       this.enfermedadesService.add(this.newEnfermedades).subscribe(
         () => this.loadData()
       );
     }
-    this.angForm.reset();
+    this.reset();
   }
 
   edit(enfermedad) {
-    this.angForm.controls['_id'].setValue(enfermedad._id);
-    this.angForm.controls['nombre'].setValue(enfermedad.nombre);
-    this.angForm.controls['descripcion'].setValue(enfermedad.descripcion);
-    this.angForm.controls['tratamiento'].setValue(enfermedad.tratamiento);
+    this.newEnfermedades._id = enfermedad._id;
+    this.newEnfermedades.nombre = enfermedad.nombre;
+    this.newEnfermedades.descripcion = enfermedad.descripcion;
+    this.newEnfermedades.tratamiento = enfermedad.tratamiento;
     this.newEnfermedades.sintomas = enfermedad.sintomas;
+    this.newEnfermedades.respuestas = enfermedad.respuestas;
   }
 
   delete(id) {
@@ -142,4 +118,5 @@ export class EnfermedadesComponent implements OnInit {
   getPreguntas(preguntas: PreguntasModel[]) {
     return Array.prototype.map.call(preguntas, function(item) { return item.descripcion; }).join(', ');
   }
+
 }

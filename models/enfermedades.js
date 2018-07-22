@@ -15,7 +15,7 @@ let Enfermedades = new Schema({
   sintomas: {
     type: Array
   },
-  preguntas: {
+  respuestas: {
     type: Array
   }
 },{

@@ -29,6 +29,17 @@ export class PreguntasService {
         }
       });
   }
+  getAll(): Observable<any> {
+    return this
+      .http
+      .get(`${this.uri}/`, {
+        params: {
+          perPage: '' + 500000,
+          page: '' + 1,
+          descripcion: ''
+        }
+      });
+  }
 
   delete(id) {
     return this

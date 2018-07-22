@@ -25,7 +25,8 @@ export class EnfermedadesService {
           page: '' + filter.pagination.page,
           nombre: filter.nombre || '',
           descripcion: filter.descripcion || '',
-          tratamiento: filter.tratamiento || ''
+          tratamiento: filter.tratamiento || '',
+          sintomas: filter.sintomas || ''
         }
       });
   }

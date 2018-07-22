@@ -23,7 +23,9 @@ routes.route('/').get(function (req, res) {
   let nombre = req.param('nombre');
   let descripcion = req.param('descripcion');
   let tratamiento = req.param('tratamiento');
+  let sintomas = req.param('sintomas');
 
+  console.log(sintomas);
   const filter =
     { $and: [
         {"nombre" : {$regex : ".*" + nombre + ".*"}},
@@ -72,6 +74,8 @@ routes.route('/update/:id').post(function (req, res) {
       enfermedad.nombre = req.body.nombre;
       enfermedad.descripcion = req.body.descripcion;
       enfermedad.tratamiento = req.body.tratamiento;
+      enfermedad.sintomas = req.body.sintomas;
+      enfermedad.respuestas = req.body.respuestas;
 
       enfermedad.save().then(enfermedad => {
         res.json('Update complete');
