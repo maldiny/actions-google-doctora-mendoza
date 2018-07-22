@@ -10,48 +10,53 @@ import {SintomasService} from '../services/sintomas.service';
 import {SintomasFilter} from '../models/sintomas.filter';
 import {SintomasResponse} from '../models/sintomas.response';
 import {SintomasModel} from '../models/sintomas.model';
+import {forEach} from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-enfermedades',
   templateUrl: './enfermedades.component.html',
   styleUrls: ['./enfermedades.component.css']
 })
-export class EnfermedadesComponent implements OnInit{
+export class EnfermedadesComponent implements OnInit {
 
   angForm: FormGroup;
+  newEnfermedades = new EnfermedadesModel();
   data: EnfermedadesResponse;
   filter: EnfermedadesFilter;
   optionsModel: number[];
   sintomas: SintomasModel[];
   dropdownList = [];
-  selectedItems = [];
   dropdownSettings = {};
 
   ngOnInit () {
     this.sintomasService.getAll().subscribe(data => {
       this.sintomas = data.sintomas;
-      console.log(this.sintomas);
     });
 
-    // this.selectedItems = [
-    //   { item_id: 3, item_text: 'Pune' },
-    //   { item_id: 4, item_text: 'Navsari' }
-    // ];
     this.dropdownSettings = {
       singleSelection: false,
       idField: '_id',
       textField: 'nombre',
       selectAllText: 'Seleccionar todo',
       unSelectAllText: 'Deseleccionar Todo',
-      itemsShowLimit: 5,
+      searchPlaceholderText: 'Buscar',
       allowSearchFilter: true
     };
   }
-  onItemSelect (item: any) {
-    console.log(item);
+
+  onSelect (item: any) {
+    this.newEnfermedades.sintomas.push(item);
   }
   onSelectAll (items: any) {
-    console.log(items);
+    this.newEnfermedades.sintomas = items;
+  }
+  onDeSelect (item: any) {
+    this.newEnfermedades.sintomas = this.newEnfermedades.sintomas.filter(function( obj ) {
+      return obj._id !== item._id;
+    });
+  }
+  onDeSelectAll (items: any) {
+    this.newEnfermedades.sintomas = [];
   }
 
   constructor(private enfermedadesService: EnfermedadesService, private fb: FormBuilder, private sintomasService: SintomasService) {
@@ -126,7 +131,4 @@ export class EnfermedadesComponent implements OnInit{
     this.loadData();
   }
 
-  select(){
-    console.log('select');
-  }
 }

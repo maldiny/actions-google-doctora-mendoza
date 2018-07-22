@@ -20,15 +20,16 @@
         <label class="col-md-4">Tratamiento</label>
         <input type="text" class="form-control" name="tratamiento" formControlName="tratamiento" #tratamiento/>
       </div>
-      <div class="form-group">
+      <div>
         <label class="col-md-4">Sintomas</label>
         <ng-multiselect-dropdown
           [placeholder]="'Seleccionar Sintomas'"
           [data]="sintomas"
-          [(ngModel)]="selectedItems"
           [settings]="dropdownSettings"
-          (onSelect)="onItemSelect($event)"
-          (onSelectAll)="onSelectAll($event)">
+          (onSelect)="onSelect($event)"
+          (onDeSelect)="onDeSelect($event)"
+          (onSelectAll)="onSelectAll($event)"
+          (onDeSelectAll)="onDeSelectAll($event)">
         </ng-multiselect-dropdown>
       </div>
       <div
@@ -38,7 +39,7 @@
           El campo nombre es obligatorio.
         </div>
       </div>
-      <div class="form-group text-right">
+      <div class="form-group text-right mt-4">
         <button type="submit" (click)="submit()" [disabled]="angForm.pristine || angForm.invalid"
                 class="btn btn-primary">
           <span class="glyphicon glyphicon-plus"></span> Agregar
