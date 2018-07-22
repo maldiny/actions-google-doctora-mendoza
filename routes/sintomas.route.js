@@ -3,15 +3,15 @@ const app = express();
 const routes = express.Router();
 const CONFIF = require('../config/constantes');
 
-// Require Preguntas model in our routes module
-let Preguntas = require('../models/preguntas');
+// Require Sintomas model in our routes module
+let Sintomas = require('../models/sintomas');
 
 // Defined store route
 routes.route('/add').post(function (req, res) {
-  let pregunta = new Preguntas(req.body);
-  pregunta.save()
+  let sintoma = new Sintomas(req.body);
+  sintoma.save()
     .then(game => {
-      res.status(200).json({'pregunta': 'Preguntas in added successfully'});
+      res.status(200).json({'sintoma': 'Sintomas in added successfully'});
     })
     .catch(err => {
       res.status(400).send("unable to save to database");
@@ -20,26 +20,26 @@ routes.route('/add').post(function (req, res) {
 
 routes.route('/').get(function (req, res) {
 
-  let descripcion = req.param('descripcion');
+  let nombre = req.param('nombre');
 
-  console.log(descripcion);
-  const filter = {"descripcion" : {$regex : ".*" + descripcion + ".*"}};
+  console.log(nombre);
+  const filter = {"nombre" : {$regex : ".*" + nombre + ".*"}};
 
   let perPage = parseInt(req.param('perPage') || CONFIF.PER_PAGE);
   let page = parseInt(req.param('page') || CONFIF.PAGE);
 
-  Preguntas
-    .find(filter,function (err, preguntas){
+  Sintomas
+    .find(filter,function (err, sintomas){
     if(err){
       console.log(err);
     }
     else {
-      Preguntas.countDocuments(filter,function(err, total){
+      Sintomas.countDocuments(filter,function(err, total){
         var response = {
-          preguntas: preguntas,
+          sintomas: sintomas,
           count: total,
           perPage: perPage,
-          page: page,
+          page: page
         }
         res.json(response);
       })
@@ -53,20 +53,20 @@ routes.route('/').get(function (req, res) {
 // Defined edit route
 routes.route('/edit/:id').get(function (req, res) {
   let id = req.params.id;
-  Preguntas.findById(id, function (err, pregunta){
-    res.json(pregunta);
+  Sintomas.findById(id, function (err, sintoma){
+    res.json(sintoma);
   });
 });
 
 //  Defined update route
 routes.route('/update/:id').post(function (req, res) {
-  Preguntas.findById(req.params.id, function(err, pregunta) {
-    if (!pregunta)
+  Sintomas.findById(req.params.id, function(err, sintoma) {
+    if (!sintoma)
       return next(new Error('Could not load Document'));
     else {
-      pregunta.descripcion = req.body.descripcion;
+      sintoma.nombre = req.body.nombre;
 
-      pregunta.save().then(pregunta => {
+      sintoma.save().then(sintoma => {
         res.json('Update complete');
       })
         .catch(err => {
@@ -78,7 +78,7 @@ routes.route('/update/:id').post(function (req, res) {
 
 // Defined delete | remove | destroy route
 routes.route('/delete/:id').get(function (req, res) {
-  Preguntas.findByIdAndRemove({_id: req.params.id}, function(err, pregunta){
+  Sintomas.findByIdAndRemove({_id: req.params.id}, function(err, sintoma){
     if(err) res.json(err);
     else res.json('Successfully removed');
   });

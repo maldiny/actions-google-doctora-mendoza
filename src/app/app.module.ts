@@ -1,10 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppLoadingService } from './components/utils/loading/app-loading.service';
+import { AppLoadingComponent } from './components/utils/loading/app-loading.component';
 
 import { AppComponent } from './app.component';
 import { EnfermedadesComponent } from './components/enfermedades/enfermedades.component';
@@ -14,6 +17,8 @@ import { SintomasComponent } from './components/sintomas/sintomas.component';
 import { EnfermedadesService } from './components/services/enfermedades.service';
 import { SintomasService } from './components/services/sintomas.service';
 import { PreguntasService } from './components/services/preguntas.service';
+
+import { CeilPipe } from './components/pipes/ceil.pipe';
 
 const routes: Routes = [
   {
@@ -35,19 +40,24 @@ const routes: Routes = [
     AppComponent,
     EnfermedadesComponent,
     PreguntasComponent,
-    SintomasComponent
+    AppLoadingComponent,
+    SintomasComponent,
+    CeilPipe,
   ],
   imports: [
     BrowserModule,
     SlimLoadingBarModule,
     ReactiveFormsModule,
+    FormsModule,
     HttpClientModule,
+    NgMultiSelectDropDownModule.forRoot(),
     RouterModule.forRoot(routes)
   ],
   providers: [
     EnfermedadesService,
     SintomasService,
-    PreguntasService
+    PreguntasService,
+    AppLoadingService
   ],
   bootstrap: [AppComponent]
 })

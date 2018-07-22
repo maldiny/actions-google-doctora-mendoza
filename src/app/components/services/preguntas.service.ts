@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable({
   providedIn: 'root'
@@ -10,18 +11,40 @@ export class PreguntasService {
 
   constructor(private http: HttpClient) { }
 
-  add(unit_name, unit_price) {
+  add(descripcion): Observable<any> {
     const obj = {
-      unit_name: unit_name,
-      unit_price: unit_price
+      descripcion: descripcion
     };
-    this.http.post(`${this.uri}/add`, obj)
-      .subscribe(res => console.log('Done'));
+    return this.http.post(`${this.uri}/add`, obj);
   }
 
-  getAdUnits() {
+  get(filter) {
     return this
       .http
-      .get(`${this.uri}/`);
+      .get(`${this.uri}/`, {
+        params: {
+          perPage: '' + filter.pagination.perPage,
+          page: '' + filter.pagination.page,
+          descripcion: filter.descripcion || ''
+        }
+      });
+  }
+
+  delete(id) {
+    return this
+      .http
+      .get(`${this.uri}/delete/${id}`);
+  }
+
+  edit(id) {
+    return this
+      .http
+      .get(`${this.uri}/edit/${id}`);
+  }
+
+  update(pregunta) {
+    return this
+      .http
+      .post(`${this.uri}/update/${pregunta._id}`, pregunta);
   }
 }

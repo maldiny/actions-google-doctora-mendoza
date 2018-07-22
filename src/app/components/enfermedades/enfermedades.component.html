@@ -1,3 +1,124 @@
-<p>
-  enfermedades works!
-</p>
+<div class="page-header">
+  <h1>Enfermedades</h1>
+</div>
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Nueva Enfermedad</h3>
+  </div>
+  <div class="panel-body">
+    <form [formGroup]="angForm" novalidate>
+      <div class="form-group">
+        <label class="col-md-4">Nombre</label>
+        <input type="text" class="form-control" name="nombre" formControlName="nombre" #nombre/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">Descripción</label>
+        <input type="text" class="form-control" name="descripcion" formControlName="descripcion" #descripcion/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">Tratamiento</label>
+        <input type="text" class="form-control" name="tratamiento" formControlName="tratamiento" #tratamiento/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">Sintomas</label>
+        <ng-multiselect-dropdown
+          [placeholder]="'Seleccionar Sintomas'"
+          [data]="sintomas"
+          [(ngModel)]="selectedItems"
+          [settings]="dropdownSettings"
+          (onSelect)="onItemSelect($event)"
+          (onSelectAll)="onSelectAll($event)">
+        </ng-multiselect-dropdown>
+      </div>
+      <div
+        *ngIf="angForm.controls['nombre'].invalid && (angForm.controls['nombre'].dirty || angForm.controls['nombre'].touched)"
+        class="alert alert-danger">
+        <div *ngIf="angForm.controls['nombre'].errors.required">
+          El campo nombre es obligatorio.
+        </div>
+      </div>
+      <div class="form-group text-right">
+        <button type="submit" (click)="submit()" [disabled]="angForm.pristine || angForm.invalid"
+                class="btn btn-primary">
+          <span class="glyphicon glyphicon-plus"></span> Agregar
+        </button>
+        <button (click)="reset()" class="btn btn-link mr-3">
+          <span class="glyphicon glyphicon-trash"></span> Limpiar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="container">
+    <h4 class="margin_top_1">Buscador</h4>
+    <div class="panel-body">
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="nombre_buscador_id">Nombre</span>
+        </div>
+        <input (keyup)="loadData()" [(ngModel)]="filter.nombre" type="text" class="form-control" aria-label="Default" aria-describedby="nombre_buscador_id">
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="descripcion_buscador_id">Descripcion</span>
+        </div>
+        <input (keyup)="loadData()" [(ngModel)]="filter.descripcion" type="text" class="form-control" aria-label="Default" aria-describedby="descripcion_buscador_id">
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="tratamiento_buscador_id">Tratamiento</span>
+        </div>
+        <input (keyup)="loadData()" [(ngModel)]="filter.tratamiento" type="text" class="form-control" aria-label="Default" aria-describedby="tratamiento_buscador_id">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="data !== undefined && data.enfermedades.length > 0">
+  <table class="table table-hover margin_top_1">
+    <thead>
+    <tr>
+      <th class="row_80 align-middle">Nombre</th>
+      <th class="row_80 align-middle">Descripcion</th>
+      <th class="row_80 align-middle">Tratamiento</th>
+      <th class="row_center_20 align-middle">Actions</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr *ngFor="let enfermedad of data.enfermedades">
+      <td class="row_80 align-middle">{{ enfermedad.nombre }}</td>
+      <td class="row_80 align-middle">{{ enfermedad.descripcion }}</td>
+      <td class="row_80 align-middle">{{ enfermedad.tratamiento }}</td>
+      <td class="row_center_20 align-middle">
+        <button (click)="edit(enfermedad)" class="btn btn-primary mr-4"><span class="glyphicon glyphicon-pencil mr-2"></span>
+          Edit
+        </button>
+        <button (click)="delete(enfermedad._id)" class="btn btn-danger"><span
+          class="glyphicon glyphicon-remove mr-2"></span> Delete
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <nav aria-label="Page navigation" >
+    <ul class="pagination pull-right">
+      <li *ngIf="data.page > 1">
+        <a (click)="paginacion(-1)" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li> <span aria-hidden="true">Pagina {{data.page}} de {{(data.count / data.perPage) | ceil }}</span></li>
+      <li *ngIf="data.perPage*data.page < data.count">
+        <a (click)="paginacion(1)" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+<div *ngIf="data == undefined || data.enfermedades.length == 0" class="alert alert-info margin_top_1" role="alert">No hay elementos en la lista</div>
+

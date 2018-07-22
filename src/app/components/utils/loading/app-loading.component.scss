@@ -1,0 +1,305 @@
+$loading-width: 40px;
+$loading-height: 40px;
+
+.spinner-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  background: hsla(0,0%,100%,.8);
+  z-index:1000;
+  .spinner-block {
+    position: relative;
+    width: 1em;
+    height: .8888888889em;
+    margin: 0 auto;
+    opacity: 1;
+    will-change: transform;
+    -webkit-transform-origin: 0 0;
+    -ms-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-animation: spinnerAnimationShow 1s ease-out;
+    animation: spinnerAnimationShow 1s ease-out;
+    font-size: 48px;
+    .spinner-block-module {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1em;
+      height: .2222222222em;
+      will-change: transform;
+      -webkit-transform-origin: 0 0;
+      -ms-transform-origin: 0 0;
+      transform-origin: 0 0;
+    }
+    .spinner-block-module-1 {
+      background-color: #2dcccd;
+      z-index: 3;
+      -webkit-animation: spinnerAnimation1 6s ease-in-out 1s infinite;
+      animation: spinnerAnimation1 6s ease-in-out 1s infinite;
+    }
+    .spinner-block-module-2 {
+      background-color: #2a86ca;
+      top: .3703703704em;
+      z-index: 2;
+      -webkit-animation: spinnerAnimation2 6s ease-in-out 1s infinite;
+      animation: spinnerAnimation2 6s ease-in-out 1s infinite;
+    }
+    .spinner-block-module-3 {
+      background-color: #004481;
+      top: .7407407407em;
+      z-index: 1;
+      -webkit-transform-origin: 0 100%;
+      -ms-transform-origin: 0 100%;
+      transform-origin: 0 100%;
+      -webkit-animation: spinnerAnimation3 6s ease-in-out 1s infinite;
+      animation: spinnerAnimation3 6s ease-in-out 1s infinite;
+    }
+    @-webkit-keyframes spinnerAnimationShow {
+      0% {
+        -webkit-transform:translateY(1.11111em);
+        transform:translateY(1.11111em);
+        opacity:0
+      }
+      50% {
+        -webkit-transform:translateY(0);
+        transform:translateY(0);
+        opacity:.3
+      }
+      to {
+        -webkit-transform:translateY(0);
+        transform:translateY(0);
+        opacity:1
+      }
+    }
+    @keyframes spinnerAnimationShow {
+      0% {
+        -webkit-transform:translateY(1.11111em);
+        transform:translateY(1.11111em);
+        opacity:0
+      }
+      50% {
+        -webkit-transform:translateY(0);
+        transform:translateY(0);
+        opacity:.3
+      }
+      to {
+        -webkit-transform:translateY(0);
+        transform:translateY(0);
+        opacity:1
+      }
+    }
+    @-webkit-keyframes spinnerAnimation1 {
+      0%,66.64%,to {
+        -webkit-transform:translateY(0) scaleY(1);
+        transform:translateY(0) scaleY(1);
+        z-index:3
+      }
+      8.33%,41.65%,58.31% {
+        -webkit-transform:translateY(.37037em) scaleY(1);
+        transform:translateY(.37037em) scaleY(1);
+        z-index:3
+      }
+      16.66% {
+        -webkit-transform:translateY(.37037em) scaleY(2.7);
+        transform:translateY(.37037em) scaleY(2.7);
+        z-index:3
+      }
+      24.99% {
+        -webkit-transform:translateY(.37037em) scaleY(1);
+        transform:translateY(.37037em) scaleY(1);
+        z-index:2
+      }
+      33.32% {
+        -webkit-transform:translateY(0) scaleY(1);
+        transform:translateY(0) scaleY(1);
+        z-index:2
+      }
+      49.98% {
+        -webkit-transform:translateY(.74074em) scaleY(1);
+        transform:translateY(.74074em) scaleY(1);
+        z-index:3
+      }
+      74.97%,83.3%,91.63% {
+        -webkit-transform:translateY(.37037em) scaleY(1);
+        transform:translateY(.37037em) scaleY(1);
+        z-index:1
+      }
+    }
+    @keyframes spinnerAnimation1 {
+      0%,66.64%,to {
+        -webkit-transform:translateY(0) scaleY(1);
+        transform:translateY(0) scaleY(1);
+        z-index:3
+      }
+      8.33%,41.65%,58.31% {
+        -webkit-transform:translateY(.37037em) scaleY(1);
+        transform:translateY(.37037em) scaleY(1);
+        z-index:3
+      }
+      16.66% {
+        -webkit-transform:translateY(.37037em) scaleY(2.7);
+        transform:translateY(.37037em) scaleY(2.7);
+        z-index:3
+      }
+      24.99% {
+        -webkit-transform:translateY(.37037em) scaleY(1);
+        transform:translateY(.37037em) scaleY(1);
+        z-index:2
+      }
+      33.32% {
+        -webkit-transform:translateY(0) scaleY(1);
+        transform:translateY(0) scaleY(1);
+        z-index:2
+      }
+      49.98% {
+        -webkit-transform:translateY(.74074em) scaleY(1);
+        transform:translateY(.74074em) scaleY(1);
+        z-index:3
+      }
+      74.97%,83.3%,91.63% {
+        -webkit-transform:translateY(.37037em) scaleY(1);
+        transform:translateY(.37037em) scaleY(1);
+        z-index:1
+      }
+    }
+    @-webkit-keyframes spinnerAnimation2 {
+      0%,8.33%,16.66%,66.64%,91.63%,to {
+        -webkit-transform:translateY(0) scaleY(1);
+        transform:translateY(0) scaleY(1);
+        z-index:2
+      }
+      24.99%,33.32%,41.65%,49.98%,58.31% {
+        -webkit-transform:translateY(0) scaleY(1);
+        transform:translateY(0) scaleY(1);
+        z-index:1
+      }
+      74.97% {
+        -webkit-transform:translateY(0) scaleY(1);
+        transform:translateY(0) scaleY(1);
+        z-index:3
+      }
+      83.3% {
+        -webkit-transform:translateY(0) scaleY(2.7);
+        transform:translateY(0) scaleY(2.7);
+        z-index:3
+      }
+    }
+    @keyframes spinnerAnimation2 {
+      0%,8.33%,16.66%,66.64%,91.63%,to {
+        -webkit-transform:translateY(0) scaleY(1);
+        transform:translateY(0) scaleY(1);
+        z-index:2
+      }
+      24.99%,33.32%,41.65%,49.98%,58.31% {
+        -webkit-transform:translateY(0) scaleY(1);
+        transform:translateY(0) scaleY(1);
+        z-index:1
+      }
+      74.97% {
+        -webkit-transform:translateY(0) scaleY(1);
+        transform:translateY(0) scaleY(1);
+        z-index:3
+      }
+      83.3% {
+        -webkit-transform:translateY(0) scaleY(2.7);
+        transform:translateY(0) scaleY(2.7);
+        z-index:3
+      }
+    }
+    @-webkit-keyframes spinnerAnimation3 {
+      0%,66.64%,to {
+        -webkit-transform:translateY(0) scaleY(1);
+        transform:translateY(0) scaleY(1);
+        z-index:1
+      }
+      8.33%,74.97% {
+        -webkit-transform:translateY(-.37037em) scaleY(1);
+        transform:translateY(-.37037em) scaleY(1);
+        z-index:1
+      }
+      16.66% {
+        -webkit-transform:translateY(-.74074em) scaleY(1);
+        transform:translateY(-.74074em) scaleY(1);
+        z-index:1
+      }
+      24.99%,91.63% {
+        -webkit-transform:translateY(-.37037em) scaleY(1);
+        transform:translateY(-.37037em) scaleY(1);
+        z-index:3
+      }
+      33.32% {
+        -webkit-transform:translateY(0) scaleY(1);
+        transform:translateY(0) scaleY(1);
+        z-index:2
+      }
+      41.65%,58.31% {
+        -webkit-transform:translateY(-.37037em) scaleY(1);
+        transform:translateY(-.37037em) scaleY(1);
+        z-index:2
+      }
+      49.98% {
+        -webkit-transform:translateY(-.37037em) scaleY(2.7);
+        transform:translateY(-.37037em) scaleY(2.7);
+        z-index:2
+      }
+      83.3% {
+        -webkit-transform:translateY(-.74074em) scaleY(1);
+        transform:translateY(-.74074em) scaleY(1);
+        z-index:2
+      }
+    }
+    @keyframes spinnerAnimation3 {
+      0%,66.64%,to {
+        -webkit-transform:translateY(0) scaleY(1);
+        transform:translateY(0) scaleY(1);
+        z-index:1
+      }
+      8.33%,74.97% {
+        -webkit-transform:translateY(-.37037em) scaleY(1);
+        transform:translateY(-.37037em) scaleY(1);
+        z-index:1
+      }
+      16.66% {
+        -webkit-transform:translateY(-.74074em) scaleY(1);
+        transform:translateY(-.74074em) scaleY(1);
+        z-index:1
+      }
+      24.99%,91.63% {
+        -webkit-transform:translateY(-.37037em) scaleY(1);
+        transform:translateY(-.37037em) scaleY(1);
+        z-index:3
+      }
+      33.32% {
+        -webkit-transform:translateY(0) scaleY(1);
+        transform:translateY(0) scaleY(1);
+        z-index:2
+      }
+      41.65%,58.31% {
+        -webkit-transform:translateY(-.37037em) scaleY(1);
+        transform:translateY(-.37037em) scaleY(1);
+        z-index:2
+      }
+      49.98% {
+        -webkit-transform:translateY(-.37037em) scaleY(2.7);
+        transform:translateY(-.37037em) scaleY(2.7);
+        z-index:2
+      }
+      83.3% {
+        -webkit-transform:translateY(-.74074em) scaleY(1);
+        transform:translateY(-.74074em) scaleY(1);
+        z-index:2
+      }
+    }
+  }
+}

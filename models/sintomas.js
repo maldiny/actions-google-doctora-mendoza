@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 // Define collection and schema for AdUnits
-let Preguntas = new Schema({
-  descripcion: {
+let Sintomas = new Schema({
+  nombre: {
     type: String
   }
 },{
-  collection: 'preguntas'
+  collection: 'sintomas'
 });
 
-module.exports = mongoose.model('Preguntas', Preguntas);
+module.exports = mongoose.model('Sintomas', Sintomas);

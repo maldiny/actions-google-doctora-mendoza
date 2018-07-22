@@ -1,3 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/dist/css/bootstrap.min.css";
 @import "../node_modules/ng2-slim-loading-bar/style.css";
+
+.custom-bootstrap {
+  font-size: 160%;
+}
+
+.btn {
+  font-size: 90%;
+}

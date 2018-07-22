@@ -1,46 +1,88 @@
-<div class="card">
-  <div class="card-body">
+<div class="page-header">
+  <h1>Preguntas</h1>
+</div>
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Nueva Pregunta</h3>
+  </div>
+  <div class="panel-body">
     <form [formGroup]="angForm" novalidate>
       <div class="form-group">
-        <label class="col-md-4">Unit Name</label>
-        <input type="text" class="form-control" name="unit_name" formControlName="unit_name" #unit_name/>
+        <label class="col-md-4">Descripcion</label>
+        <input type="text" class="form-control" name="descripcion" formControlName="descripcion" #descripcion/>
       </div>
-      <div *ngIf="angForm.controls['unit_name'].invalid && (angForm.controls['unit_name'].dirty || angForm.controls['unit_name'].touched)" class="alert alert-danger">
-        <div *ngIf="angForm.controls['unit_name'].errors.required">
-          Unit Name is required.
+      <div
+        *ngIf="angForm.controls['descripcion'].invalid && (angForm.controls['descripcion'].dirty || angForm.controls['descripcion'].touched)"
+        class="alert alert-danger">
+        <div *ngIf="angForm.controls['descripcion'].errors.required">
+          El campo descripcion es obligatorio.
         </div>
       </div>
-      <div class="form-group">
-        <label class="col-md-4">Unit Price</label>
-        <input type="text" class="form-control" name="unit_price" formControlName="unit_price" #unit_price/>
-      </div>
-      <div *ngIf="angForm.controls['unit_price'].invalid && (angForm.controls['unit_price'].dirty || angForm.controls['unit_price'].touched)" class="alert alert-danger">
-        <div *ngIf="angForm.controls['unit_price'].errors.required">
-          Unit Price is required.
-        </div>
-      </div>
-      <div class="form-group">
-        <button (click)="addAdUnit(unit_name.value, unit_price.value)" [disabled]="angForm.pristine || angForm.invalid" class="btn btn-primary">Create Unit</button>
+      <div class="form-group text-right">
+        <button type="submit" (click)="submit()" [disabled]="angForm.pristine || angForm.invalid"
+                class="btn btn-primary">
+          <span class="glyphicon glyphicon-plus"></span> Agregar
+        </button>
+        <button (click)="reset()" class="btn btn-link mr-3">
+          <span class="glyphicon glyphicon-trash"></span> Limpiar
+        </button>
       </div>
     </form>
   </div>
 </div>
 
-<table class="table table-hover">
-  <thead>
-  <tr>
-    <td>Ad Unit Name</td>
-    <td>Ad Unit Price</td>
-    <td colspan="2">Actions</td>
-  </tr>
-  </thead>
+<div class="panel panel-default">
+  <div class="container">
+    <h4 class="margin_top_1">Buscador</h4>
+    <div class="panel-body">
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-default">Descripcion</span>
+        </div>
+        <input (keyup)="loadData()" [(ngModel)]="filter.descripcion" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+      </div>
+    </div>
+  </div>
+</div>
 
-  <tbody>
-  <tr *ngFor="let adunit of adunits">
-    <td>{{ adunit.unit_name }}</td>
-    <td>{{ adunit.unit_price }}</td>
-    <td><a [routerLink]="['/edit', adunit._id]" class="btn btn-primary">Edit</a></td>
-    <td><a [routerLink]="" class="btn btn-danger">Delete</a></td>
-  </tr>
-  </tbody>
-</table>
+<div *ngIf="data !== undefined && data.preguntas.length > 0">
+  <table class="table table-hover margin_top_1">
+    <thead>
+    <tr>
+      <th class="row_80 align-middle">Descripcion</th>
+      <th class="row_center_20 align-middle">Actions</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr *ngFor="let pregunta of data.preguntas">
+      <td class="row_80 align-middle">{{ pregunta.descripcion }}</td>
+      <td class="row_center_20 align-middle">
+        <button (click)="edit(pregunta)" class="btn btn-primary mr-4"><span class="glyphicon glyphicon-pencil mr-2"></span>
+          Edit
+        </button>
+        <button (click)="delete(pregunta._id)" class="btn btn-danger"><span
+          class="glyphicon glyphicon-remove mr-2"></span> Delete
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <nav aria-label="Page navigation" >
+    <ul class="pagination pull-right">
+      <li *ngIf="data.page > 1">
+        <a (click)="paginacion(-1)" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li> <span aria-hidden="true">Pagina {{data.page}} de {{(data.count / data.perPage) | ceil }}</span></li>
+      <li *ngIf="data.perPage*data.page < data.count">
+        <a (click)="paginacion(1)" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+<div *ngIf="data == undefined || data.preguntas.length == 0" class="alert alert-info margin_top_1" role="alert">No hay elementos en la lista</div>
