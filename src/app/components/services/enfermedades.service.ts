@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import {EnfermedadesModel} from '../models/enfermedades.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,13 +12,8 @@ export class EnfermedadesService {
 
   constructor(private http: HttpClient) { }
 
-  add(nombre, descripcion, tratamiento): Observable<any> {
-    const obj = {
-      nombre: nombre,
-      descripcion: descripcion,
-      tratamiento: tratamiento,
-    };
-    return this.http.post(`${this.uri}/add`, obj);
+  add(enfermedad: EnfermedadesModel): Observable<any> {
+    return this.http.post(`${this.uri}/add`, enfermedad);
   }
 
   get(filter) {

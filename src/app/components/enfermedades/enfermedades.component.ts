@@ -10,6 +10,7 @@ import {SintomasService} from '../services/sintomas.service';
 import {SintomasFilter} from '../models/sintomas.filter';
 import {SintomasResponse} from '../models/sintomas.response';
 import {SintomasModel} from '../models/sintomas.model';
+import {PreguntasModel} from '../models/preguntas.model';
 import {forEach} from '@angular/router/src/utils/collection';
 
 @Component({
@@ -70,7 +71,7 @@ export class EnfermedadesComponent implements OnInit {
       _id: [],
       nombre: ['', Validators.required ],
       descripcion: ['', Validators.required ],
-      tratamiento: ['', Validators.required ],
+      tratamiento: ['', Validators.required ]
     });
   }
 
@@ -88,7 +89,8 @@ export class EnfermedadesComponent implements OnInit {
         _id: this.angForm.controls['_id'].value,
         nombre: this.angForm.controls['nombre'].value,
         descripcion: this.angForm.controls['descripcion'].value,
-        tratamiento: this.angForm.controls['tratamiento'].value
+        tratamiento: this.angForm.controls['tratamiento'].value,
+        sintomas: this.newEnfermedades.sintomas
       };
       this.enfermedadesService.update(obj).subscribe(
         () => this.loadData()
@@ -96,9 +98,10 @@ export class EnfermedadesComponent implements OnInit {
 
     } else {
       // Create
-      this.enfermedadesService.add(this.angForm.controls['nombre'].value,
-        this.angForm.controls['descripcion'].value,
-        this.angForm.controls['tratamiento'].value).subscribe(
+      this.newEnfermedades.nombre = this.angForm.controls['nombre'].value;
+      this.newEnfermedades.descripcion = this.angForm.controls['descripcion'].value;
+      this.newEnfermedades.tratamiento = this.angForm.controls['tratamiento'].value;
+      this.enfermedadesService.add(this.newEnfermedades).subscribe(
         () => this.loadData()
       );
     }
@@ -110,6 +113,7 @@ export class EnfermedadesComponent implements OnInit {
     this.angForm.controls['nombre'].setValue(enfermedad.nombre);
     this.angForm.controls['descripcion'].setValue(enfermedad.descripcion);
     this.angForm.controls['tratamiento'].setValue(enfermedad.tratamiento);
+    this.newEnfermedades.sintomas = enfermedad.sintomas;
   }
 
   delete(id) {
@@ -131,4 +135,11 @@ export class EnfermedadesComponent implements OnInit {
     this.loadData();
   }
 
+  getSintomas(sintomas: SintomasModel[]) {
+    return Array.prototype.map.call(sintomas, function(item) { return item.nombre; }).join(', ');
+  }
+
+  getPreguntas(preguntas: PreguntasModel[]) {
+    return Array.prototype.map.call(preguntas, function(item) { return item.descripcion; }).join(', ');
+  }
 }

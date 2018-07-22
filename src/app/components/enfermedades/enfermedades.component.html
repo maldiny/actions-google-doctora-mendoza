@@ -25,6 +25,7 @@
         <ng-multiselect-dropdown
           [placeholder]="'Seleccionar Sintomas'"
           [data]="sintomas"
+          [(ngModel)]="newEnfermedades.sintomas"
           [settings]="dropdownSettings"
           (onSelect)="onSelect($event)"
           (onDeSelect)="onDeSelect($event)"
@@ -85,6 +86,7 @@
       <th class="row_80 align-middle">Nombre</th>
       <th class="row_80 align-middle">Descripcion</th>
       <th class="row_80 align-middle">Tratamiento</th>
+      <th class="row_80 align-middle">Sintomas</th>
       <th class="row_center_20 align-middle">Actions</th>
     </tr>
     </thead>
@@ -94,6 +96,7 @@
       <td class="row_80 align-middle">{{ enfermedad.nombre }}</td>
       <td class="row_80 align-middle">{{ enfermedad.descripcion }}</td>
       <td class="row_80 align-middle">{{ enfermedad.tratamiento }}</td>
+      <td class="row_80 align-middle">{{ getSintomas(enfermedad.sintomas) }}</td>
       <td class="row_center_20 align-middle">
         <button (click)="edit(enfermedad)" class="btn btn-primary mr-4"><span class="glyphicon glyphicon-pencil mr-2"></span>
           Edit
