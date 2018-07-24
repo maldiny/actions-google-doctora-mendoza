@@ -2,7 +2,14 @@
   <h1>Enfermedades</h1>
 </div>
 
-<div class="panel panel-primary">
+<p>
+  <button type="button" class="btn btn-outline-primary" (click)="isCollapsed = !isCollapsed"
+          [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
+    Nueva Enfermedad
+  </button>
+</p>
+
+<div class="panel panel-primary" [ngbCollapse]="isCollapsed">
   <div class="panel-heading">
     <h3 class="panel-title">Nueva Enfermedad</h3>
   </div>
@@ -101,34 +108,34 @@
       <div class="input-group mb-3">
         <div class="input-group-prepend mr-3">
           <span class="input-group-text" id="estado_buscador_id">Estado</span>
+          <button (click)="filterStatus('OK')" class="btn mr-3"
+                  [ngClass]="{ 'btn-success': filter.status === 'OK', 'btn-link': filter.status !== 'OK'}">
+            <span class="glyphicon glyphicon-ok-sign"></span>
+          </button>
+          <button (click)="filterStatus('KO')" class="btn"
+                  [ngClass]="{ 'btn-warning': filter.status === 'KO', 'btn-link': filter.status !== 'KO'}">
+            <span class="glyphicon glyphicon-question-sign"></span>
+          </button>
         </div>
-        <button (click)="filterStatus('OK')" class="btn mr-3"
-                [ngClass]="{ 'btn-success': filter.status === 'OK', 'btn-link': filter.status !== 'OK'}">
-          <span class="glyphicon glyphicon-ok-sign"></span>
-        </button>
-        <button (click)="filterStatus('KO')" class="btn"
-                [ngClass]="{ 'btn-warning': filter.status === 'KO', 'btn-link': filter.status !== 'KO'}">
-          <span class="glyphicon glyphicon-question-sign"></span>
-        </button>
       </div>
       <div class="input-group mb-3">
         <div class="input-group-prepend">
           <span class="input-group-text" id="nombre_buscador_id">Nombre</span>
+          <input (keyup)="loadData()" [(ngModel)]="filter.nombre" type="text" class="form-control" aria-label="Default" aria-describedby="nombre_buscador_id">
         </div>
-        <input (keyup)="loadData()" [(ngModel)]="filter.nombre" type="text" class="form-control" aria-label="Default" aria-describedby="nombre_buscador_id">
-      </div>
+        </div>
       <div class="input-group mb-3">
         <div class="input-group-prepend">
           <span class="input-group-text" id="descripcion_buscador_id">Descripcion</span>
+          <input (keyup)="loadData()" [(ngModel)]="filter.descripcion" type="text" class="form-control" aria-label="Default" aria-describedby="descripcion_buscador_id">
         </div>
-        <input (keyup)="loadData()" [(ngModel)]="filter.descripcion" type="text" class="form-control" aria-label="Default" aria-describedby="descripcion_buscador_id">
-      </div>
+        </div>
       <div class="input-group mb-3">
         <div class="input-group-prepend">
           <span class="input-group-text" id="tratamiento_buscador_id">Tratamiento</span>
+          <input (keyup)="loadData()" [(ngModel)]="filter.tratamiento" type="text" class="form-control" aria-label="Default" aria-describedby="tratamiento_buscador_id">
         </div>
-        <input (keyup)="loadData()" [(ngModel)]="filter.tratamiento" type="text" class="form-control" aria-label="Default" aria-describedby="tratamiento_buscador_id">
-      </div>
+        </div>
     </div>
   </div>
 </div>
@@ -189,53 +196,45 @@
 <div *ngIf="data == undefined || data.enfermedades.length == 0" class="alert alert-info margin_top_1" role="alert">No hay elementos en la lista</div>
 
 <div *ngIf="conflictos !== undefined && conflictos.length > 0">
-  <table *ngFor="let conflicto of conflictos" class="table table-hover margin_top_1">
-    <thead>
-    <tr>
-      <th class="row_80 align-middle"></th>
-      <th class="row_80 align-middle">Nombre</th>
-      <th class="row_80 align-middle">Descripcion</th>
-      <th class="row_80 align-middle">Tratamiento</th>
-      <th class="row_80 align-middle">Sintomas</th>
-      <th class="row_center_20 align-middle">Actions</th>
-    </tr>
-    </thead>
+  <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+    <ngb-panel *ngFor="let conflicto of conflictos, let i = index" title="Conflicto #{{i+1}}">
+      <ng-template ngbPanelContent>
+        <table class="table table-hover margin_top_1">
+          <thead>
+          <tr>
+            <th class="row_80 align-middle"></th>
+            <th class="row_80 align-middle">Nombre</th>
+            <th class="row_80 align-middle">Descripcion</th>
+            <th class="row_80 align-middle">Tratamiento</th>
+            <th class="row_80 align-middle">Sintomas</th>
+            <th class="row_center_20 align-middle">Actions</th>
+          </tr>
+          </thead>
 
-    <tbody>
-    <tr *ngFor="let enfermedad of conflicto.enfermedades">
-      <td class="row_80 align-middle">
-        <button *ngIf="!preguntaPendiente(enfermedad)" class="btn btn-success"><span class="glyphicon glyphicon-ok-sign"></span></button>
-        <button *ngIf="preguntaPendiente(enfermedad)" class="btn btn-warning"><span class="glyphicon glyphicon-question-sign"></span></button>
-      </td>
-      <td class="row_80 align-middle">{{ enfermedad.nombre }}</td>
-      <td class="row_80 align-middle">{{ enfermedad.descripcion }}</td>
-      <td class="row_80 align-middle">{{ enfermedad.tratamiento }}</td>
-      <td class="row_80 align-middle">{{ getSintomas(enfermedad.sintomas) }}</td>
-      <td class="row_center_20 align-middle">
-        <button (click)="edit(enfermedad)" class="btn btn-primary mr-4"><span class="glyphicon glyphicon-pencil mr-2"></span>
-          Edit
-        </button>
-        <button (click)="delete(enfermedad._id)" class="btn btn-danger"><span
-          class="glyphicon glyphicon-remove mr-2"></span> Delete
-        </button>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+          <tbody>
+          <tr *ngFor="let enfermedad of conflicto.enfermedades">
+            <td class="row_80 align-middle">
+              <button *ngIf="!preguntaPendiente(enfermedad)" class="btn btn-success"><span class="glyphicon glyphicon-ok-sign"></span></button>
+              <button *ngIf="preguntaPendiente(enfermedad)" class="btn btn-warning"><span class="glyphicon glyphicon-question-sign"></span></button>
+            </td>
+            <td class="row_80 align-middle">{{ enfermedad.nombre }}</td>
+            <td class="row_80 align-middle">{{ enfermedad.descripcion }}</td>
+            <td class="row_80 align-middle">{{ enfermedad.tratamiento }}</td>
+            <td class="row_80 align-middle">{{ getSintomas(enfermedad.sintomas) }}</td>
+            <td class="row_center_20 align-middle">
+              <button (click)="edit(enfermedad)" class="btn btn-primary mr-4"><span class="glyphicon glyphicon-pencil mr-2"></span>
+                Edit
+              </button>
+              <button (click)="delete(enfermedad._id)" class="btn btn-danger"><span
+                class="glyphicon glyphicon-remove mr-2"></span> Delete
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion>
 </div>
 
 <div *ngIf="conflictos == undefined || conflictos.length == 0" class="alert alert-success mb-4" role="alert">No hay conflictos</div>
-
-<p>
-  <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-    Link with href
-  </a>
-  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-    Button with data-target
-  </button>
-</p>
-<div class="collapse" id="collapseExample">
-  <div class="card card-body">
-    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-  </div>
-</div>

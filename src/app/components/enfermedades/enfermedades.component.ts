@@ -7,11 +7,8 @@ import {EnfermedadesFilter} from '../models/enfermedades.filter';
 import {EnfermedadesService} from '../services/enfermedades.service';
 import {EnfermedadesResponse} from '../models/enfermedades.response';
 import {SintomasService} from '../services/sintomas.service';
-import {SintomasFilter} from '../models/sintomas.filter';
-import {SintomasResponse} from '../models/sintomas.response';
 import {SintomasModel} from '../models/sintomas.model';
 import {PreguntasModel} from '../models/preguntas.model';
-import {forEach} from '@angular/router/src/utils/collection';
 import {PreguntasService} from '../services/preguntas.service';
 import {RespuestasModel} from '../models/respuestas.model';
 import {forkJoin} from 'rxjs';
@@ -24,6 +21,7 @@ import {ConflictosResponse} from '../models/conflictos.response';
 })
 export class EnfermedadesComponent implements OnInit {
 
+  public isCollapsed = true;
   newEnfermedades = new EnfermedadesModel();
   data: EnfermedadesResponse;
   conflictos: ConflictosResponse[];
@@ -96,6 +94,7 @@ export class EnfermedadesComponent implements OnInit {
     this.newEnfermedades.tratamiento = enfermedad.tratamiento;
     this.newEnfermedades.sintomas = enfermedad.sintomas;
     this.newEnfermedades.respuestas = enfermedad.respuestas;
+    this.isCollapsed = false;
   }
 
   delete(id) {

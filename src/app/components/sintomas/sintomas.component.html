@@ -39,8 +39,8 @@
       <div class="input-group mb-3">
         <div class="input-group-prepend">
           <span class="input-group-text" id="inputGroup-sizing-default">Nombre</span>
+          <input (keyup)="loadData()" [(ngModel)]="filter.nombre" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
         </div>
-        <input (keyup)="loadData()" [(ngModel)]="filter.nombre" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
       </div>
     </div>
   </div>

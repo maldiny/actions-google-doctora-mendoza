@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { HttpClientModule } from '@angular/common/http';
@@ -47,6 +48,7 @@ const routes: Routes = [
     ResponseComponent
   ],
   imports: [
+    NgbModule.forRoot(),
     BrowserModule,
     SlimLoadingBarModule,
     ReactiveFormsModule,
