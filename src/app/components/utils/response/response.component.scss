@@ -3,4 +3,34 @@
 .row_20 { min-width: 20%; max-width: 20%;}
 .row_center_80 { min-width: 80%; max-width: 80%; text-align: center;}
 .row_center_20 { min-width: 20%; max-width: 20%; text-align: center;}
-
+.Table
+{
+  display: table;
+  width: 100%;
+}
+.Title
+{
+  display: table-caption;
+  text-align: center;
+  font-weight: bold;
+  font-size: larger;
+}
+.Heading
+{
+  display: table-row;
+  font-weight: bold;
+  text-align: center;
+}
+.Row
+{
+  display: table-row;
+}
+.Cell
+{
+  display: table-cell;
+  border: solid;
+  border-width: thin;
+  padding-left: 5px;
+  padding-right: 5px;
+  width: 100%;
+}

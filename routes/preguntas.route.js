@@ -5,12 +5,34 @@ const CONFIF = require('../config/constantes');
 
 // Require Preguntas model in our routes module
 let Preguntas = require('../models/preguntas');
+let Enfermedades = require('../models/enfermedades');
 
 // Defined store route
 routes.route('/add').post(function (req, res) {
   let pregunta = new Preguntas(req.body);
   pregunta.save()
-    .then(game => {
+    .then(item => {
+      console.log(item);
+      Enfermedades.find(function(err, enfermedades){
+        if(err){
+          console.log(err);
+        }
+        else {
+          enfermedades.forEach(function(enfermedad) {
+            const respuesta = {
+              respuesta: '?',
+              pregunta: item
+            }
+            enfermedad.respuestas.push(respuesta);
+            let xxxx = new Enfermedades(enfermedad);
+            xxxx.save();
+          });
+        }
+      });
+
+
+
+
       res.status(200).json({'pregunta': 'Preguntas in added successfully'});
     })
     .catch(err => {

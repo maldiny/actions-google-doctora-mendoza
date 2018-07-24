@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 
-import { EnfermedadesModel } from '../models/enfermedades.model';
-import { EnfermedadesFilter } from '../models/enfermedades.filter';
+import {EnfermedadesModel} from '../models/enfermedades.model';
+import {EnfermedadesFilter} from '../models/enfermedades.filter';
 
-import { EnfermedadesService } from '../services/enfermedades.service';
+import {EnfermedadesService} from '../services/enfermedades.service';
 import {EnfermedadesResponse} from '../models/enfermedades.response';
 import {SintomasService} from '../services/sintomas.service';
 import {SintomasFilter} from '../models/sintomas.filter';
@@ -14,6 +14,8 @@ import {PreguntasModel} from '../models/preguntas.model';
 import {forEach} from '@angular/router/src/utils/collection';
 import {PreguntasService} from '../services/preguntas.service';
 import {RespuestasModel} from '../models/respuestas.model';
+import {forkJoin} from 'rxjs';
+import {ConflictosResponse} from '../models/conflictos.response';
 
 @Component({
   selector: 'app-enfermedades',
@@ -24,22 +26,22 @@ export class EnfermedadesComponent implements OnInit {
 
   newEnfermedades = new EnfermedadesModel();
   data: EnfermedadesResponse;
+  conflictos: ConflictosResponse[];
   filter: EnfermedadesFilter;
   sintomas: SintomasModel[];
   preguntas: PreguntasModel[];
   dropdownSettings = {};
 
-  ngOnInit () {
-    // Get all Sintomas
-    this.sintomasService.getAll().subscribe(data => {
-      this.sintomas = data.sintomas;
-    });
-    // Get all Preguntas
-    this.preguntasService.getAll().subscribe(data => {
-      this.preguntas = data.preguntas;
-      this.newEnfermedades.respuestas = data.preguntas.map(item => new RespuestasModel(item));
-      console.log(this.newEnfermedades);
-    });
+  ngOnInit() {
+
+    forkJoin(
+      this.sintomasService.getAll(),
+      this.preguntasService.getAll()
+    ).subscribe(result => {
+      this.sintomas = result[0].sintomas;
+      this.preguntas = result[1].preguntas;
+      this.newEnfermedades.respuestas = result[1].preguntas.map(item => new RespuestasModel(item));
+    }, err => console.error(err));
 
     this.dropdownSettings = {
       singleSelection: false,
@@ -64,7 +66,11 @@ export class EnfermedadesComponent implements OnInit {
     this.newEnfermedades.descripcion = '';
     this.newEnfermedades.tratamiento = '';
     this.newEnfermedades.sintomas = [];
-    this.newEnfermedades.respuestas.map(item => item.respuesta = '?');
+    this.newEnfermedades.respuestas = this.newEnfermedades.respuestas.map(item => {
+      item.respuesta = '?';
+      return item;
+    });
+    console.log(this.newEnfermedades.respuestas);
   }
 
   submit() {
@@ -104,6 +110,13 @@ export class EnfermedadesComponent implements OnInit {
       .subscribe((data: EnfermedadesResponse) => {
         this.data = data;
       });
+
+    this.enfermedadesService
+      .getConflictos()
+      .subscribe((data: ConflictosResponse[]) => {
+        this.conflictos = data;
+        console.log(data);
+      });
   }
 
   paginacion(index) {
@@ -112,11 +125,40 @@ export class EnfermedadesComponent implements OnInit {
   }
 
   getSintomas(sintomas: SintomasModel[]) {
-    return Array.prototype.map.call(sintomas, function(item) { return item.nombre; }).join(', ');
+    return sintomas.map(item => item.nombre).join(', ');
+    // return Array.prototype.map.call(sintomas, function(item) { return item.nombre; }).join(', ');
   }
 
   getPreguntas(preguntas: PreguntasModel[]) {
-    return Array.prototype.map.call(preguntas, function(item) { return item.descripcion; }).join(', ');
+    return Array.prototype.map.call(preguntas, function (item) {
+      return item.descripcion;
+    }).join(', ');
   }
 
+  setRespuesta(id, respuesta) {
+    this.newEnfermedades.respuestas.forEach(function(item, index, array) {
+      if ( item.pregunta._id === id ) {
+        item.respuesta = respuesta;
+      }
+    });
+  }
+
+  // Metodo para evaluar si una determinada enfermedad tiene preguntas pendientes de contestar
+  preguntaPendiente(enfermedad: EnfermedadesModel) {
+    const filtro = enfermedad.respuestas.filter( respuesta => respuesta.respuesta === '?');
+    if ( filtro.length > 0 ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  filterStatus(status) {
+    if ( this.filter.status === status) {
+      this.filter.status = '';
+    } else {
+      this.filter.status = status;
+    }
+    this.loadData();
+  }
 }

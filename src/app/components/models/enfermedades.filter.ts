@@ -7,6 +7,7 @@ export class EnfermedadesFilter {
   descripcion: String;
   tratamiento: String;
   pagination: PaginationFilter;
+  status: String;
 
   constructor() {
     this.pagination = new PaginationFilter();

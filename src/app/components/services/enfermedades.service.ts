@@ -26,7 +26,8 @@ export class EnfermedadesService {
           nombre: filter.nombre || '',
           descripcion: filter.descripcion || '',
           tratamiento: filter.tratamiento || '',
-          sintomas: filter.sintomas || ''
+          sintomas: filter.sintomas || '',
+          status: filter.status || '',
         }
       });
   }
@@ -47,5 +48,11 @@ export class EnfermedadesService {
     return this
       .http
       .post(`${this.uri}/update/${enfermedad._id}`, enfermedad);
+  }
+
+  getConflictos() {
+    return this
+      .http
+      .get(`${this.uri}/conflictos`);
   }
 }

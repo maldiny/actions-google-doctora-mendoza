@@ -18,23 +18,52 @@ routes.route('/add').post(function (req, res) {
     });
 });
 
+routes.route('/conflictos').get(function (req, res) {
+
+  Enfermedades.aggregate(
+    [
+      { $group :
+          {
+            _id : { "respuestas": "$respuestas", "sintomas": "$sintomas" },
+            enfermedades: { $push: "$$ROOT" },
+            count: { $sum: 1 }
+          }
+      },
+      { $match: { count: { $gt: 1 }}}
+    ], function(err, conflictos){
+    if(err){
+      console.log(err);
+    }
+    else {
+      res.json(conflictos);
+    }
+  });
+});
+
 routes.route('/').get(function (req, res) {
 
   let nombre = req.param('nombre');
   let descripcion = req.param('descripcion');
   let tratamiento = req.param('tratamiento');
   let sintomas = req.param('sintomas');
+  let status = req.param('status');
 
-  console.log(sintomas);
-  const filter =
+  let filter =
     { $and: [
         {"nombre" : {$regex : ".*" + nombre + ".*"}},
         {"descripcion" : {$regex : ".*" + descripcion + ".*"}},
         {"tratamiento" : {$regex : ".*" + tratamiento + ".*"}}]};
 
+  if( status === 'KO' ){
+    filter.$and.push({"respuestas": {$elemMatch: {respuesta:'?'}}});
+  }
+  if( status === 'OK' ){
+    filter.$and.push({"respuestas": {$not: {$elemMatch: {respuesta:'?'}}}});
+  }
+
   let perPage = parseInt(req.param('perPage') || CONFIF.PER_PAGE);
   let page = parseInt(req.param('page') || CONFIF.PAGE);
-  console.log(tratamiento);
+
   Enfermedades
     .find(filter,function (err, enfermedades){
     if(err){

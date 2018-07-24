@@ -32,27 +32,28 @@ export class SintomasComponent {
   }
 
   reset() {
-    this.angForm.controls['_id'].setValue('');
-    this.angForm.controls['nombre'].setValue('');
+    this.angForm.reset();
+    // this.angForm.controls['_id'].setValue('');
+    // this.angForm.controls['nombre'].setValue('');
   }
 
   submit() {
-    if (this.angForm.controls['_id'].value) {
-      // Update
-      const obj = {
-        _id: this.angForm.controls['_id'].value,
-        nombre: this.angForm.controls['nombre'].value
-      };
+    const obj = this.angForm.value;
+    const action = obj._id ? this.sintomasService.update(obj) : this.sintomasService.add(obj.nombre);
+    action.subscribe(
+      () => this.loadData()
+    );
+    /*if (obj._id) {
       this.sintomasService.update(obj).subscribe(
         () => this.loadData()
       );
 
     } else {
       // Create
-      this.sintomasService.add(this.angForm.controls['nombre'].value).subscribe(
+      this.sintomasService.add(obj.nombre).subscribe(
         () => this.loadData()
       );
-    }
+    }*/
     this.angForm.reset();
   }
 

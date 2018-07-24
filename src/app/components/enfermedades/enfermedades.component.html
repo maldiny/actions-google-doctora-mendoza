@@ -35,15 +35,30 @@
         <table class="table table-hover margin_top_1">
           <thead>
           <tr>
-            <th class="row_80 align-middle">Descripcion</th>
-            <th class="row_center_20 align-middle">Respuestas</th>
+            <th class="row_80 align-middle">Pregunta</th>
+            <th class="row_center_20 align-middle">Respuesta</th>
           </tr>
           </thead>
 
           <tbody>
           <tr *ngFor="let respuesta of newEnfermedades.respuestas">
-
-            <app-response-component [respuesta]="respuesta"></app-response-component>
+            <td class="row_80 align-middle">{{ respuesta.pregunta.descripcion }}</td>
+            <td class="row_center_20 align-middle">
+              <button (click)="setRespuesta(respuesta.pregunta._id, 'SI')" class="btn" [class.btn-primary]="respuesta.respuesta === 'SI'" [class.btn-link]="respuesta.respuesta !== 'SI'">
+                <span class="glyphicon glyphicon-ok-sign"></span> SI
+              </button>
+              <button (click)="setRespuesta(respuesta.pregunta._id, 'NO')" class="btn m-2" [class.btn-danger]="respuesta.respuesta === 'NO'" [class.btn-link]="respuesta.respuesta !== 'NO'">
+                <span class="glyphicon glyphicon-remove-sign"></span> NO
+              </button>
+              <button (click)="setRespuesta(respuesta.pregunta._id, '?')" class="btn"
+                      [ngClass]="{
+            'btn-warning': respuesta.respuesta === '?',
+            'btn-link': respuesta.respuesta !== '?' }">
+                <!--[class.btn-warning]="respuesta.respuesta === '?'" [class.btn-link]="respuesta.respuesta !== '?'"-->
+                <span class="glyphicon glyphicon-question-sign"></span>
+              </button>
+            </td>
+            <!-- <app-response-component [respuesta]="respuesta"></app-response-component> -->
 
             <!--<td class="row_80 align-middle">{{ pregunta.descripcion }}</td>
             <td class="row_center_20 align-middle">
@@ -84,6 +99,19 @@
     <h4 class="margin_top_1">Buscador</h4>
     <div class="panel-body">
       <div class="input-group mb-3">
+        <div class="input-group-prepend mr-3">
+          <span class="input-group-text" id="estado_buscador_id">Estado</span>
+        </div>
+        <button (click)="filterStatus('OK')" class="btn mr-3"
+                [ngClass]="{ 'btn-success': filter.status === 'OK', 'btn-link': filter.status !== 'OK'}">
+          <span class="glyphicon glyphicon-ok-sign"></span>
+        </button>
+        <button (click)="filterStatus('KO')" class="btn"
+                [ngClass]="{ 'btn-warning': filter.status === 'KO', 'btn-link': filter.status !== 'KO'}">
+          <span class="glyphicon glyphicon-question-sign"></span>
+        </button>
+      </div>
+      <div class="input-group mb-3">
         <div class="input-group-prepend">
           <span class="input-group-text" id="nombre_buscador_id">Nombre</span>
         </div>
@@ -109,6 +137,7 @@
   <table class="table table-hover margin_top_1">
     <thead>
     <tr>
+      <th class="row_80 align-middle"></th>
       <th class="row_80 align-middle">Nombre</th>
       <th class="row_80 align-middle">Descripcion</th>
       <th class="row_80 align-middle">Tratamiento</th>
@@ -119,6 +148,10 @@
 
     <tbody>
     <tr *ngFor="let enfermedad of data.enfermedades">
+      <td class="row_80 align-middle">
+        <button *ngIf="!preguntaPendiente(enfermedad)" class="btn btn-success"><span class="glyphicon glyphicon-ok-sign"></span></button>
+        <button *ngIf="preguntaPendiente(enfermedad)" class="btn btn-warning"><span class="glyphicon glyphicon-question-sign"></span></button>
+      </td>
       <td class="row_80 align-middle">{{ enfermedad.nombre }}</td>
       <td class="row_80 align-middle">{{ enfermedad.descripcion }}</td>
       <td class="row_80 align-middle">{{ enfermedad.tratamiento }}</td>
@@ -134,22 +167,75 @@
     </tr>
     </tbody>
   </table>
-  <nav aria-label="Page navigation" >
-    <ul class="pagination pull-right">
-      <li *ngIf="data.page > 1">
-        <a (click)="paginacion(-1)" aria-label="Previous">
-          <span aria-hidden="true">&laquo;</span>
-        </a>
-      </li>
-      <li> <span aria-hidden="true">Pagina {{data.page}} de {{(data.count / data.perPage) | ceil }}</span></li>
-      <li *ngIf="data.perPage*data.page < data.count">
-        <a (click)="paginacion(1)" aria-label="Next">
-          <span aria-hidden="true">&raquo;</span>
-        </a>
-      </li>
-    </ul>
-  </nav>
+  <div class="row" style="display:block">
+    <nav aria-label="Page navigation" >
+      <ul class="pagination pull-right">
+        <li *ngIf="data.page > 1">
+          <a (click)="paginacion(-1)" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li> <span aria-hidden="true">Pagina {{data.page}} de {{(data.count / data.perPage) | ceil }}</span></li>
+        <li *ngIf="data.perPage*data.page < data.count">
+          <a (click)="paginacion(1)" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </div>
+
 <div *ngIf="data == undefined || data.enfermedades.length == 0" class="alert alert-info margin_top_1" role="alert">No hay elementos en la lista</div>
 
+<div *ngIf="conflictos !== undefined && conflictos.length > 0">
+  <table *ngFor="let conflicto of conflictos" class="table table-hover margin_top_1">
+    <thead>
+    <tr>
+      <th class="row_80 align-middle"></th>
+      <th class="row_80 align-middle">Nombre</th>
+      <th class="row_80 align-middle">Descripcion</th>
+      <th class="row_80 align-middle">Tratamiento</th>
+      <th class="row_80 align-middle">Sintomas</th>
+      <th class="row_center_20 align-middle">Actions</th>
+    </tr>
+    </thead>
 
+    <tbody>
+    <tr *ngFor="let enfermedad of conflicto.enfermedades">
+      <td class="row_80 align-middle">
+        <button *ngIf="!preguntaPendiente(enfermedad)" class="btn btn-success"><span class="glyphicon glyphicon-ok-sign"></span></button>
+        <button *ngIf="preguntaPendiente(enfermedad)" class="btn btn-warning"><span class="glyphicon glyphicon-question-sign"></span></button>
+      </td>
+      <td class="row_80 align-middle">{{ enfermedad.nombre }}</td>
+      <td class="row_80 align-middle">{{ enfermedad.descripcion }}</td>
+      <td class="row_80 align-middle">{{ enfermedad.tratamiento }}</td>
+      <td class="row_80 align-middle">{{ getSintomas(enfermedad.sintomas) }}</td>
+      <td class="row_center_20 align-middle">
+        <button (click)="edit(enfermedad)" class="btn btn-primary mr-4"><span class="glyphicon glyphicon-pencil mr-2"></span>
+          Edit
+        </button>
+        <button (click)="delete(enfermedad._id)" class="btn btn-danger"><span
+          class="glyphicon glyphicon-remove mr-2"></span> Delete
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="conflictos == undefined || conflictos.length == 0" class="alert alert-success mb-4" role="alert">No hay conflictos</div>
+
+<p>
+  <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+    Link with href
+  </a>
+  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+    Button with data-target
+  </button>
+</p>
+<div class="collapse" id="collapseExample">
+  <div class="card card-body">
+    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+  </div>
+</div>
