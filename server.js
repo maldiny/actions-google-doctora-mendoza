@@ -19,9 +19,9 @@ app.use(bodyParser.json());
 app.use(cors());
 const port = process.env.PORT || 4000;
 
-app.use('/preguntas', preguntasRoutes);
-app.use('/sintomas', sintomasRoutes);
-app.use('/enfermedades', enfermedadesRoutes);
+app.use('/api/preguntas', preguntasRoutes);
+app.use('/api/sintomas', sintomasRoutes);
+app.use('/api/enfermedades', enfermedadesRoutes);
 
 app.get('/app/*', function(req, res) {
   res.sendFile(path.join(__dirname, 'dist/index.html'))

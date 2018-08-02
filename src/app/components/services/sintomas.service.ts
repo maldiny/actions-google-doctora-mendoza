@@ -8,7 +8,7 @@ import { UriUtils } from '../utils/uri/UriUtils';
 })
 export class SintomasService {
 
-  uri = UriUtils.API_ENDPOINT + '/sintomas';
+  uri = UriUtils.API_ENDPOINT + '/api/sintomas';
 
   constructor(private http: HttpClient) {
   }

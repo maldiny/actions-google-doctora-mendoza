@@ -9,7 +9,7 @@ import { UriUtils } from '../utils/uri/UriUtils';
 })
 export class EnfermedadesService {
 
-  uri = UriUtils.API_ENDPOINT + '/enfermedades';
+  uri = UriUtils.API_ENDPOINT + '/api/enfermedades';
 
   constructor(private http: HttpClient) { }
 
