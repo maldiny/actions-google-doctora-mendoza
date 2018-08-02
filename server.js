@@ -23,6 +23,12 @@ app.use('/preguntas', preguntasRoutes);
 app.use('/sintomas', sintomasRoutes);
 app.use('/enfermedades', enfermedadesRoutes);
 
+app.get('/app/*', function(req, res) {
+  res.sendFile(path.join(__dirname, 'dist/index.html'))
+});
+
+app.use(express.static(__dirname + '/dist')); // Static (public) folder
+
 const server = app.listen(port, function(){
   console.log('Listening on port ' + port);
 });

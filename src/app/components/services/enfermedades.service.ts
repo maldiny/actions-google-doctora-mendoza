@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import {EnfermedadesModel} from '../models/enfermedades.model';
+import { UriUtils } from '../utils/uri/UriUtils';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EnfermedadesService {
 
-  uri = 'http://localhost:4000/enfermedades';
+  uri = UriUtils.API_ENDPOINT + '/enfermedades';
 
   constructor(private http: HttpClient) { }
 

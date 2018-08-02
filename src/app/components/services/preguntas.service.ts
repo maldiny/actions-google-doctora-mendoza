@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
+import { UriUtils } from '../utils/uri/UriUtils';
+
 @Injectable({
   providedIn: 'root'
 })
 export class PreguntasService {
 
-  uri = 'http://localhost:4000/preguntas';
+  uri = UriUtils.API_ENDPOINT + '/preguntas';
 
   constructor(private http: HttpClient) { }
 

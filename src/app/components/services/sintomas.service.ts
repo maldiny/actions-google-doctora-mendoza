@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import {SintomasResponse} from '../models/sintomas.response';
-import {EnfermedadesResponse} from '../models/enfermedades.response';
+import { UriUtils } from '../utils/uri/UriUtils';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SintomasService {
 
-  uri = 'http://localhost:4000/sintomas';
+  uri = UriUtils.API_ENDPOINT + '/sintomas';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   add(nombre): Observable<any> {
     const obj = {
